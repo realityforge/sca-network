@@ -51,7 +51,7 @@ public class BlockingEventSourceTestCase
                       null,
                       m_result );
         base.unlock();
-        Thread.sleep( 2 );
+        Thread.sleep( 200 );
         assertEquals( "Eternally Blocking - UnLocked - has returned?",
                       true,
                       m_returned );
