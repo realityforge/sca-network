@@ -16,6 +16,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="junit" level="application" />
+    <orderEntry type="library" name="jmock" level="application" />
     <orderEntryProperties />
   </component>
 </module>

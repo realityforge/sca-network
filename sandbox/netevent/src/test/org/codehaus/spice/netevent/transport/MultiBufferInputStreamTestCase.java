@@ -4,19 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import junit.framework.TestCase;
 import org.codehaus.spice.event.EventSink;
 import org.codehaus.spice.event.impl.collections.UnboundedFifoBuffer;
 import org.codehaus.spice.netevent.buffers.BufferManager;
-import org.jmock.C;
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 /**
  * @author Peter Donald
  * @version $Revision: 1.3 $ $Date: 2004/01/13 03:13:01 $
  */
 public class MultiBufferInputStreamTestCase
-    extends TestCase
+    extends MockObjectTestCase
 {
     public void testStreamWithNoBuffers()
         throws Exception
@@ -59,7 +58,7 @@ public class MultiBufferInputStreamTestCase
         buffer.flip();
 
         final Mock mockBufferManager = new Mock( BufferManager.class );
-        mockBufferManager.expect( "releaseBuffer", C.args( C.eq( buffer ) ) );
+        mockBufferManager.expects( once() ).method( "releaseBuffer" ).with( eq( buffer ) );
         final BufferManager bm = (BufferManager)mockBufferManager.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
@@ -110,8 +109,8 @@ public class MultiBufferInputStreamTestCase
         buffer2.flip();
 
         final Mock mockBufferManager = new Mock( BufferManager.class );
-        mockBufferManager.expect( "releaseBuffer", C.args( C.eq( buffer1 ) ) );
-        mockBufferManager.expect( "releaseBuffer", C.args( C.eq( buffer2 ) ) );
+        mockBufferManager.expects( once() ).method( "releaseBuffer" ).with( eq( buffer1 ) );
+        mockBufferManager.expects( once() ).method( "releaseBuffer" ).with( eq( buffer2 ) );
         final BufferManager bm = (BufferManager)mockBufferManager.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
@@ -170,7 +169,7 @@ public class MultiBufferInputStreamTestCase
         buffer.flip();
 
         final Mock mockBufferManager = new Mock( BufferManager.class );
-        mockBufferManager.expect( "releaseBuffer", C.args( C.eq( buffer ) ) );
+        mockBufferManager.expects( once() ).method( "releaseBuffer" ).with( eq( buffer ) );
         final BufferManager bm = (BufferManager)mockBufferManager.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
@@ -225,8 +224,8 @@ public class MultiBufferInputStreamTestCase
         buffer2.flip();
 
         final Mock mockBufferManager = new Mock( BufferManager.class );
-        mockBufferManager.expect( "releaseBuffer", C.args( C.eq( buffer1 ) ) );
-        mockBufferManager.expect( "releaseBuffer", C.args( C.eq( buffer2 ) ) );
+        mockBufferManager.expects( once() ).method( "releaseBuffer" ).with( eq( buffer1 ) );
+        mockBufferManager.expects( once() ).method( "releaseBuffer" ).with( eq( buffer2 ) );
         final BufferManager bm = (BufferManager)mockBufferManager.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );

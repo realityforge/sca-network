@@ -1,17 +1,16 @@
 package org.codehaus.spice.event.impl;
 
-import junit.framework.TestCase;
 import org.codehaus.spice.event.EventHandler;
 import org.codehaus.spice.event.EventSource;
-import org.jmock.C;
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 /**
  * @author Peter Donald
  * @version $Revision: 1.2 $ $Date: 2004/02/11 04:01:13 $
  */
 public class EventPumpTestCase
-    extends TestCase
+    extends MockObjectTestCase
 {
     public void testNull_source_PassedIntoCtor()
         throws Exception
@@ -87,11 +86,11 @@ public class EventPumpTestCase
     {
         final Object event = new Object();
         final Mock mockSource = new Mock( EventSource.class );
-        mockSource.expectAndReturn( "getEvent", event );
+        mockSource.expects(once()).method( "getEvent" ).withNoArguments().will( returnValue( event ) );
         final EventSource source = (EventSource)mockSource.proxy();
 
         final Mock mockHandler = new Mock( EventHandler.class );
-        mockHandler.expect( "handleEvent", C.args( C.eq( event ) ) );
+        mockHandler.expects(once()).method( "handleEvent" ).with( eq(event) );
         final EventHandler handler = (EventHandler)mockHandler.proxy();
 
         final EventPump pump = new EventPump( source, handler );
@@ -107,7 +106,7 @@ public class EventPumpTestCase
         throws Exception
     {
         final Mock mockSource = new Mock( EventSource.class );
-        mockSource.expectAndReturn( "getEvent", null );
+        mockSource.expects(once()).method( "getEvent" ).withNoArguments().will( returnValue( null ) );
         final EventSource source = (EventSource)mockSource.proxy();
 
         final Mock mockHandler = new Mock( EventHandler.class );
@@ -128,11 +127,11 @@ public class EventPumpTestCase
         final Object event = new Object();
         final Object[] events = new Object[]{event};
         final Mock mockSource = new Mock( EventSource.class );
-        mockSource.expectAndReturn( "getEvents", C.args( C.eq( 20 ) ), events );
+        mockSource.expects(once()).method( "getEvents" ).with( eq(20) ).will( returnValue( events ) );
         final EventSource source = (EventSource)mockSource.proxy();
 
         final Mock mockHandler = new Mock( EventHandler.class );
-        mockHandler.expect( "handleEvents", C.args( C.eq( events ) ) );
+        mockHandler.expects(once()).method( "handleEvents" ).with( eq(events) );
         final EventHandler handler = (EventHandler)mockHandler.proxy();
 
         final EventPump pump = new EventPump( source, handler );
@@ -149,7 +148,7 @@ public class EventPumpTestCase
     {
         final Object[] events = new Object[ 0 ];
         final Mock mockSource = new Mock( EventSource.class );
-        mockSource.expectAndReturn( "getEvents", C.args( C.eq( 20 ) ), events );
+        mockSource.expects(once()).method( "getEvents" ).with( eq(20) ).will( returnValue( events ) );
         final EventSource source = (EventSource)mockSource.proxy();
 
         final Mock mockHandler = new Mock( EventHandler.class );
