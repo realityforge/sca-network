@@ -209,10 +209,8 @@ public class Session
 
    public synchronized void close()
    {
-      System.out.println( "Session.close" );
       requestShutdown();
 
-      System.out.println( "_status = " + _status );
       while ( true )
       {
          if ( STATUS_DISCONNECTED == _status )
@@ -226,7 +224,6 @@ public class Session
          catch ( InterruptedException e )
          {
          }
-         System.out.println( "_status = " + _status );
       }
    }
 
@@ -289,8 +286,6 @@ public class Session
 
    public void requestShutdown()
    {
-      System.out.println( "Session.requestShutdown" );
-      System.out.println( "isInShutdown() = " + isInShutdown() );
       if ( !isInShutdown() )
       {
          addEvent( new SessionDisconnectRequestEvent( this ) );
