@@ -41,8 +41,15 @@ import org.realityforge.packet.session.Session;
 import org.realityforge.packet.session.SessionManager;
 
 /**
- * @author Peter Donald
- * @version $Revision: 1.29 $ $Date: 2004/02/23 04:06:23 $
+ * Possible configuration through system properties:
+ * <p/>
+ * <ul>
+ * <li>packet.debug:  set to "true" to enable debugging.<li/>
+ * <li>session.maxIdleTime:  Number of milliseconds between pings.  Default 2000.<li/>
+ * <li>session.timeout: Number of milliseconds before session times out.  Default 120000</li>
+ * </li>
+ *
+ * @author Peter Donald, hacked a bit by James Walker
  */
 public class PacketIOEventHandler
    extends AbstractDirectedHandler
@@ -57,12 +64,37 @@ public class PacketIOEventHandler
     * The maximum amount of time that session can be idle without an attempt to
     * send write.
     */
-   private static final int MAX_IDLE_TIME = 1500; //50 * 1000;
+   private static final int MAX_IDLE_TIME;
 
    /**
     * The number of milliseconds before the session will timeout.
     */
-   private static final int TIMEOUT_IN_MILLIS = 2 * 60 * 1000;
+   private static final int TIMEOUT_IN_MILLIS;
+
+   static
+   {
+      int maxIdleTime = 2000;
+      try
+      {
+          maxIdleTime = Integer.parseInt( System.getProperty( "session.maxIdleTime", "2000" ) );
+      }
+      catch(Exception e)
+      {
+         ;
+      }
+      MAX_IDLE_TIME = maxIdleTime;
+
+      int timeout = 2 * 60 * 1000;
+      try
+      {
+          timeout = Integer.parseInt( System.getProperty( "session.timeout", "120000" ) );
+      }
+      catch(Exception e)
+      {
+         ;
+      }
+      TIMEOUT_IN_MILLIS = timeout;
+   }
 
    /**
     * The event source to register channels into.
@@ -475,6 +507,18 @@ public class PacketIOEventHandler
    {
       final ChannelTransport transport = cc.getTransport();
       final Session session = (Session) transport.getUserData();
+
+      if ( isDebugEnabled() )
+      {
+         if ( session != null )
+         {
+            debug( session, "CLOSING TRANSPORT AND SESSION: " + session.isPendingDisconnect() );
+         }
+         else
+         {
+            debug( transport, "CLOSING TRANSPORT, NO SESSION" );
+         }
+      }
 
       if ( null != session && session.isPendingDisconnect() )
       {
