@@ -2,20 +2,19 @@ package org.codehaus.spice.netevent.transport;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import junit.framework.TestCase;
 import org.codehaus.spice.event.EventSink;
 import org.codehaus.spice.event.impl.collections.UnboundedFifoBuffer;
 import org.codehaus.spice.netevent.buffers.BufferManager;
 import org.codehaus.spice.netevent.events.OutputDataPresentEvent;
-import org.jmock.C;
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 /**
  * @author Peter Donald
  * @version $Revision: 1.1 $ $Date: 2004/01/12 04:12:19 $
  */
 public class TransportOutputStreamTestCase
-    extends TestCase
+    extends MockObjectTestCase
 {
     public void testGetBufferWhenNoneExists()
         throws Exception
@@ -23,8 +22,7 @@ public class TransportOutputStreamTestCase
         final Mock mockBM = new Mock( BufferManager.class );
         final int count = 3;
         final ByteBuffer expected = ByteBuffer.allocate( count );
-        mockBM.expectAndReturn( "aquireBuffer", C.args( C.eq( count ) ),
-                                expected );
+        mockBM.expects( once() ).method( "aquireBuffer" ).with( eq( count ) ).will( returnValue( expected ) );
         final BufferManager bm = (BufferManager)mockBM.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
@@ -50,8 +48,7 @@ public class TransportOutputStreamTestCase
         final Mock mockBM = new Mock( BufferManager.class );
         final int count = 3;
         final ByteBuffer expected = ByteBuffer.allocate( count );
-        mockBM.expectAndReturn( "aquireBuffer", C.args( C.eq( count ) ),
-                                expected );
+        mockBM.expects( once() ).method( "aquireBuffer" ).with( eq( count ) ).will( returnValue( expected ) );
         final BufferManager bm = (BufferManager)mockBM.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
@@ -85,15 +82,11 @@ public class TransportOutputStreamTestCase
         final ByteBuffer expected = ByteBuffer.allocate( count );
 
         final Mock mockBM = new Mock( BufferManager.class );
-        mockBM.expectAndReturn( "aquireBuffer", C.args( C.eq( count ) ),
-                                expected );
+        mockBM.expects( once() ).method( "aquireBuffer" ).with( eq( count ) ).will( returnValue( expected ) );
         final BufferManager bm = (BufferManager)mockBM.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
-        mockSink.
-            expectAndReturn( "addEvent",
-                             C.args( C.isA( OutputDataPresentEvent.class ) ),
-                             true );
+        mockSink.expects( once() ).method( "addEvent" ).with( isA( OutputDataPresentEvent.class ) ).will( returnValue( true ) );
         final EventSink sink = (EventSink)mockSink.proxy();
 
         final ChannelTransport transport =
@@ -124,19 +117,12 @@ public class TransportOutputStreamTestCase
         final ByteBuffer buffer2 = ByteBuffer.allocate( count );
 
         final Mock mockBM = new Mock( BufferManager.class );
-        mockBM.matchAndReturn( "aquireBuffer", C.args(
-            new CallOnceConstraint( C.eq( count ) ) ),
-                               buffer2 );
-        mockBM.matchAndReturn( "aquireBuffer", C.args(
-            new CallOnceConstraint( C.eq( count ) ) ),
-                               buffer1 );
+        mockBM.stubs().method( "aquireBuffer").with( new CallOnceConstraint( eq( count ) ) ).will( returnValue( buffer2 ));
+        mockBM.stubs().method( "aquireBuffer").with( new CallOnceConstraint( eq( count ) ) ).will( returnValue( buffer1 ));
         final BufferManager bm = (BufferManager)mockBM.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
-        mockSink.
-            expectAndReturn( "addEvent",
-                             C.args( C.isA( OutputDataPresentEvent.class ) ),
-                             true );
+        mockSink.expects( once() ).method( "addEvent" ).with( isA( OutputDataPresentEvent.class ) ).will( returnValue( true ) );
         final EventSink sink = (EventSink)mockSink.proxy();
 
         final ChannelTransport transport =

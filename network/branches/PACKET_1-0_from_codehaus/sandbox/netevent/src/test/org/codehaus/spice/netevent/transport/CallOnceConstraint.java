@@ -1,6 +1,6 @@
 package org.codehaus.spice.netevent.transport;
 
-import org.jmock.Constraint;
+import org.jmock.core.Constraint;
 
 /**
  * @author Peter Donald
@@ -29,4 +29,11 @@ public class CallOnceConstraint
             return false;
         }
     }
+
+   public StringBuffer describeTo( StringBuffer stringBuffer )
+   {
+      stringBuffer.append("CallOnceConstraint on ");
+      _constraint.describeTo( stringBuffer );
+      return stringBuffer;
+   }
 }

@@ -1,17 +1,16 @@
 package org.codehaus.spice.event.impl;
 
-import junit.framework.TestCase;
 import org.codehaus.spice.event.EventSink;
 import org.codehaus.spice.event.EventValve;
-import org.jmock.C;
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 /**
  * @author Peter Donald
  * @version $Revision: 1.1 $ $Date: 2003/12/16 02:03:12 $
  */
 public class ValveControlledSinkTestCase
-    extends TestCase
+    extends MockObjectTestCase
 {
     public void testNullSinkPassedIntoCtor()
         throws Exception
@@ -71,7 +70,8 @@ public class ValveControlledSinkTestCase
 
         final Mock mockSink = new Mock( EventSink.class );
         final Object lock = new Object();
-        mockSink.expectAndReturn( "getSinkLock", lock );
+        mockSink.expects( once() ).method( "getSinkLock" ).withNoArguments().will( returnValue( lock ) );
+
         final EventSink sink = (EventSink)mockSink.proxy();
         final ValveControlledSink vcs = new ValveControlledSink( sink, valve );
 
@@ -86,15 +86,11 @@ public class ValveControlledSinkTestCase
     {
         final Object[] events = new Object[ 0 ];
         final Mock mockValve = new Mock( EventValve.class );
-        mockValve.expectAndReturn( "acceptEvents",
-                                   C.args( C.eq( events ) ),
-                                   true );
+        mockValve.expects( once() ).method( "acceptEvents" ).with( eq( events)).will( returnValue( true ));
         final EventValve valve = (EventValve)mockValve.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
-        mockSink.expectAndReturn( "addEvents",
-                                  C.args( C.eq( events ) ),
-                                  true );
+        mockSink.expects( once() ).method( "addEvents" ).with( eq( events)).will( returnValue( true ));
         final EventSink sink = (EventSink)mockSink.proxy();
         final ValveControlledSink vcs = new ValveControlledSink( sink, valve );
 
@@ -109,9 +105,7 @@ public class ValveControlledSinkTestCase
     {
         final Object[] events = new Object[ 0 ];
         final Mock mockValve = new Mock( EventValve.class );
-        mockValve.expectAndReturn( "acceptEvents",
-                                   C.args( C.eq( events ) ),
-                                   false );
+        mockValve.expects( once() ).method( "acceptEvents" ).with( eq( events)).will( returnValue( false ));
         final EventValve valve = (EventValve)mockValve.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
@@ -130,15 +124,11 @@ public class ValveControlledSinkTestCase
     {
         final Object event = new Object();
         final Mock mockValve = new Mock( EventValve.class );
-        mockValve.expectAndReturn( "acceptEvent",
-                                   C.args( C.eq( event ) ),
-                                   true );
+        mockValve.expects( once() ).method( "acceptEvent" ).with( eq( event)).will( returnValue( true ));
         final EventValve valve = (EventValve)mockValve.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
-        mockSink.expectAndReturn( "addEvent",
-                                  C.args( C.eq( event ) ),
-                                  true );
+        mockSink.expects( once() ).method( "addEvent" ).with( eq( event)).will( returnValue( true ));
         final EventSink sink = (EventSink)mockSink.proxy();
         final ValveControlledSink vcs = new ValveControlledSink( sink, valve );
 
@@ -153,9 +143,7 @@ public class ValveControlledSinkTestCase
     {
         final Object event = new Object();
         final Mock mockValve = new Mock( EventValve.class );
-        mockValve.expectAndReturn( "acceptEvent",
-                                   C.args( C.eq( event ) ),
-                                   false );
+        mockValve.expects( once() ).method( "acceptEvent" ).with( eq( event)).will( returnValue( false ));
         final EventValve valve = (EventValve)mockValve.proxy();
 
         final Mock mockSink = new Mock( EventSink.class );
