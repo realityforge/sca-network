@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4" relativePaths="false">
+  <component name="ModuleRootManager" />
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/packet/target/classes" />
+    <exclude-output />
+    <output-test url="file://$MODULE_DIR$/packet/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/event/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/event/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/jmxtools/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/netevent/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/netevent/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/packet/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packet/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/sca/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sca/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/timeevent/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/timeevent/src/test" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/event/target" />
+      <excludeFolder url="file://$MODULE_DIR$/jmxtools/target" />
+      <excludeFolder url="file://$MODULE_DIR$/netevent/target" />
+      <excludeFolder url="file://$MODULE_DIR$/packet/target" />
+      <excludeFolder url="file://$MODULE_DIR$/sca/target" />
+      <excludeFolder url="file://$MODULE_DIR$/timeevent/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
+
