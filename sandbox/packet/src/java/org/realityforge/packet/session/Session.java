@@ -21,11 +21,16 @@ import org.realityforge.packet.events.SessionDisconnectRequestEvent;
 /**
  * The session object for Client.
  *
- * @author Peter Donald
- * @version $Revision: 1.30 $ $Date: 2004/02/23 04:09:57 $
+ * @author Peter Donald, hacked a bit by James Walker
  */
 public class Session
 {
+   /**
+    * Flag that set to true when should debug messages.
+    */
+   private static final boolean DEBUG =
+      System.getProperty( "packet.debug", "false" ).equals( "true" );
+
    /**
     * Status indicating client is not yet connected. Should only be set when
     * session is initially created.
@@ -211,18 +216,33 @@ public class Session
    {
       requestShutdown();
 
+      boolean sentSecondRequest = false;
+
       while ( true )
       {
-         if ( STATUS_DISCONNECTED == _status )
+         if ( STATUS_DISCONNECTED == _status || STATUS_NOT_CONNECTED == _status )
          {
             return;
          }
          try
          {
-            wait( 5000 );
+            wait( 2000 );
          }
          catch ( InterruptedException e )
          {
+         }
+         final long lastCommAge = (System.currentTimeMillis() - getLastCommTime()) / 1000;
+         if ( lastCommAge > 3000 && !sentSecondRequest )
+         {
+            debug( "Shutdown has taken over 3 seconds, requesting again" );
+            requestShutdown();
+            sentSecondRequest = true;
+         }
+         else if ( lastCommAge > 5000 )
+         {
+            debug( "Shutdown has taken over 5 seconds, forcing closed at this end" );
+            setTransport( null );
+            return;
          }
       }
    }
@@ -611,6 +631,23 @@ public class Session
       synchronized ( this )
       {
          notifyAll();
+      }
+   }
+
+   private boolean isDebugEnabled()
+   {
+      return DEBUG;
+   }
+
+   private void debug( final String text )
+   {
+      if ( isDebugEnabled() )
+      {
+         final String message =
+            ( isClient() ? "PACK CL" : "PACK SV" ) +
+            " (" + getSessionID() + "): " + text + " -- " +
+            getUserData();
+         System.out.println( message );
       }
    }
 
