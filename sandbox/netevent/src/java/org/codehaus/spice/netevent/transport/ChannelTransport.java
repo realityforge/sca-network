@@ -19,7 +19,7 @@ import org.codehaus.spice.netevent.buffers.BufferManager;
 
 /**
  * An underlying transport layer that uses TCP/IP.
- * 
+ *
  * @author Peter Donald
  * @version $Revision: 1.25 $ $Date: 2004/02/22 23:46:11 $
  */
@@ -306,7 +306,6 @@ public class ChannelTransport
    {
       if( !m_closed )
       {
-         new Exception("closing").printStackTrace( );
          m_closed = true;
          m_outputStream.setClosed();
          setKey( null );

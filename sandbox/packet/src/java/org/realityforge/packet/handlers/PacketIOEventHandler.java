@@ -485,7 +485,6 @@ public class PacketIOEventHandler
 
       if ( isDebugEnabled() )
       {
-         new Exception("tracking closure").printStackTrace();
          debug( transport, "Transport Closed. Session=" + session );
       }
 
