@@ -22,11 +22,6 @@
     <distributionDirectory>/home/groups/s/sp/spice/htdocs/downloads/${pom.id}</distributionDirectory>
     <distributionSite>spice.sf.net</distributionSite>
 
-    <repository>
-        <connection>scm:cvs::pserver:anonymous@cvs.sourceforge.net:/cvsroot/spice:spice-lib/${pom.id}</connection>
-        <url>http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/spice/spice-lib/${pom.id}/</url>
-    </repository>
-
     <versions>
         <version>
             <id>current</id>

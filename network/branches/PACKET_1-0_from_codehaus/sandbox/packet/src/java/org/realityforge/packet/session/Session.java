@@ -20,7 +20,7 @@ import org.realityforge.packet.events.SessionDisconnectRequestEvent;
 
 /**
  * The session object for Client.
- * 
+ *
  * @author Peter Donald
  * @version $Revision: 1.30 $ $Date: 2004/02/23 04:09:57 $
  */
@@ -171,7 +171,7 @@ public class Session
     * Create Serverside session with specified ID.
     *
     * @param sessionID the session ID
-    * @param authID the authID
+    * @param authID    the authID
     */
    public Session( final long sessionID,
                    final short authID )
@@ -185,7 +185,7 @@ public class Session
    public Session( final InetSocketAddress address,
                    final EventSink sink )
    {
-      this( -1, (short)0, true, address );
+      this( -1, (short) 0, true, address );
       setSink( sink );
    }
 
@@ -193,8 +193,8 @@ public class Session
     * Create session with specified ID.
     *
     * @param sessionID the session ID
-    * @param authID the authID
-    * @param client the client flag
+    * @param authID    the authID
+    * @param client    the client flag
     */
    protected Session( final long sessionID,
                       final short authID,
@@ -209,21 +209,24 @@ public class Session
 
    public synchronized void close()
    {
+      System.out.println( "Session.close" );
       requestShutdown();
 
-      while( true )
+      System.out.println( "_status = " + _status );
+      while ( true )
       {
-         if( STATUS_DISCONNECTED == _status )
+         if ( STATUS_DISCONNECTED == _status )
          {
             return;
          }
          try
          {
-            wait();
+            wait( 5000 );
          }
-         catch( InterruptedException e )
+         catch ( InterruptedException e )
          {
          }
+         System.out.println( "_status = " + _status );
       }
    }
 
@@ -234,7 +237,7 @@ public class Session
 
    public long getLastCommTime()
    {
-      if( null != _transport )
+      if ( null != _transport )
       {
          return Math.max( _transport.getLastRxTime(),
                           _transport.getLastTxTime() );
@@ -258,9 +261,9 @@ public class Session
 
    public synchronized void waitUntilConnected()
    {
-      while( true )
+      while ( true )
       {
-         if( STATUS_ESTABLISHED == _status && !isConnecting() || isError() )
+         if ( STATUS_ESTABLISHED == _status && !isConnecting() || isError() )
          {
             return;
          }
@@ -268,7 +271,7 @@ public class Session
          {
             wait();
          }
-         catch( InterruptedException e )
+         catch ( InterruptedException e )
          {
          }
       }
@@ -286,7 +289,9 @@ public class Session
 
    public void requestShutdown()
    {
-      if( !isInShutdown() )
+      System.out.println( "Session.requestShutdown" );
+      System.out.println( "isInShutdown() = " + isInShutdown() );
+      if ( !isInShutdown() )
       {
          addEvent( new SessionDisconnectRequestEvent( this ) );
       }
@@ -304,7 +309,7 @@ public class Session
 
    private void addEvent( final Object event )
    {
-      if( null != _sink )
+      if ( null != _sink )
       {
          _sink.addEvent( event );
       }
@@ -323,7 +328,7 @@ public class Session
 
    public void cancelTimeout()
    {
-      if( null != _timeoutKey )
+      if ( null != _timeoutKey )
       {
          _timeoutKey.cancel();
          _timeoutKey = null;
@@ -402,7 +407,7 @@ public class Session
     */
    public void setLastPacketProcessed( final short lastPacketProcessed )
    {
-      if( lastPacketProcessed != _lastPacketProcessed )
+      if ( lastPacketProcessed != _lastPacketProcessed )
       {
          _hasReceivedData = true;
          _needsToSendAck = true;
@@ -526,7 +531,7 @@ public class Session
 
    public boolean sendPacket( final ByteBuffer buffer )
    {
-      if( isInShutdown() )
+      if ( isInShutdown() )
       {
          return false;
       }
@@ -555,7 +560,7 @@ public class Session
 
    public void setTransport( final ChannelTransport transport )
    {
-      if( null != _transport )
+      if ( null != _transport )
       {
          _transport.setUserData( null );
          _transport.getInputStream().close();
@@ -566,7 +571,7 @@ public class Session
       }
       _needsToSendAck = true;
       _transport = transport;
-      if( null != _transport )
+      if ( null != _transport )
       {
          _connections++;
          setStatus( Session.STATUS_CONNECTED );
@@ -574,11 +579,11 @@ public class Session
       }
       else
       {
-         if( isConnecting() )
+         if ( isConnecting() )
          {
             setConnecting( false );
          }
-         if( Session.STATUS_DISCONNECTED != _status )
+         if ( Session.STATUS_DISCONNECTED != _status )
          {
             setStatus( Session.STATUS_NOT_CONNECTED );
          }
@@ -608,7 +613,7 @@ public class Session
    public void setConnecting( final boolean connecting )
    {
       _connecting = connecting;
-      synchronized( this )
+      synchronized ( this )
       {
          notifyAll();
       }
@@ -617,12 +622,12 @@ public class Session
    public String toString()
    {
       final long sessionID = getSessionID();
-      final int transportID = (_transport != null) ? _transport.getId() : -1;
+      final int transportID = ( _transport != null ) ? _transport.getId() : -1;
       return "Session[SessionID=" + sessionID +
-             ", TransportID=" + transportID +
-             ", UserData=" + getUserData() +
-             ", IsClient=" + isClient() +
-             ", Status=" + getStatus() +
-             "]";
+         ", TransportID=" + transportID +
+         ", UserData=" + getUserData() +
+         ", IsClient=" + isClient() +
+         ", Status=" + getStatus() +
+         "]";
    }
 }

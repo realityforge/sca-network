@@ -306,6 +306,7 @@ public class ChannelTransport
    {
       if( !m_closed )
       {
+         new Exception("closing").printStackTrace( );
          m_closed = true;
          m_outputStream.setClosed();
          setKey( null );
